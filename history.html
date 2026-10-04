@@ -1,0 +1,76 @@
+<!doctype html>
+<html lang="en" class="history">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#333F48">
+  <meta name="description" content="a walk through aaron's history">
+  <title>history — aaronca.no</title>
+  <link rel="icon" type="image/svg+xml" href="favicon.svg">
+  <link rel="stylesheet" href="styles.css">
+  <link rel="stylesheet" href="history.css">
+</head>
+<body class="history">
+  <main class="page history-page">
+    <nav class="nav" aria-label="Main navigation">
+      <a class="logo" href="/"><span class="logo-name">aaron</span><span class="logo-domain">ca.no</span></a>
+      <div class="nav-right">
+        <a href="index.html">← back</a>
+      </div>
+    </nav>
+
+    <section class="history-hero">
+      <span class="label">a little museum</span>
+      <h1>my history</h1>
+      <p class="history-intro">walk down the hallway and check out the exhibits.</p>
+    </section>
+
+    <section class="exhibits-wrap" aria-label="History exhibits">
+      <button type="button" class="mode-toggle" id="modeToggle">view as list</button>
+
+      <div class="scene3d" id="scene3d" aria-hidden="true">
+        <canvas id="corridorCanvas"></canvas>
+        <div class="caption-overlay" id="captionOverlay" hidden>
+          <span class="exhibit-year" id="overlayYear"></span>
+          <h2 class="exhibit-title" id="overlayTitle" tabindex="-1"></h2>
+          <p class="exhibit-blurb" id="overlayBlurb"></p>
+        </div>
+        <div class="look-prompt" id="lookPrompt" hidden>
+          <p>click and drag to look around</p>
+        </div>
+      </div>
+
+      <div class="corridor-controls" id="corridorControls">
+        <button type="button" class="dpad-btn dpad-forward" data-move="forward" aria-label="Walk forward">▲</button>
+        <button type="button" class="dpad-btn dpad-jump" data-move="jump" aria-label="Jump">⤒</button>
+        <button type="button" class="dpad-btn dpad-left" data-move="strafe-left" aria-label="Strafe left">◀</button>
+        <button type="button" class="dpad-btn dpad-right" data-move="strafe-right" aria-label="Strafe right">▶</button>
+        <button type="button" class="dpad-btn dpad-back" data-move="back" aria-label="Walk backward">▼</button>
+      </div>
+
+      <div class="exhibits-list" id="exhibitsList" hidden></div>
+      <div class="fallback-nav" id="fallbackNav" hidden>
+        <button type="button" id="prevExhibit">← previous</button>
+        <span id="exhibitPosition" aria-live="polite"></span>
+        <button type="button" id="nextExhibit">next →</button>
+      </div>
+    </section>
+
+    <footer class="footer history-footer">
+      <span>WASD to walk, shift to sprint, space to jump, drag or arrow keys to look around</span>
+      <span>© 2026</span>
+    </footer>
+  </main>
+  <script src="script.js" defer></script>
+  <script src="history.js" defer></script>
+  <script type="importmap">
+  {
+    "imports": {
+      "three": "https://cdn.jsdelivr.net/npm/three@0.186.0/build/three.module.js",
+      "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.186.0/examples/jsm/"
+    }
+  }
+  </script>
+  <script type="module" src="corridor.js"></script>
+</body>
+</html>

@@ -1,0 +1,74 @@
+[hidden] { display: none !important; }
+html.history, body.history { height: auto; min-height: 100%; overflow: auto; }
+.history-page { height: auto; min-height: 100dvh; padding-bottom: 32px; }
+.history-hero { padding: 28px 0 10px; }.history-hero h1 { margin: 6px 0 0; font-size: clamp(40px, 8vw, 64px); font-weight: 700; letter-spacing: -.02em; line-height: 1; }.history-intro { margin: 10px 0 0; color: var(--dim); font-size: 14px; }
+
+.exhibits-wrap { margin-top: 20px; }
+.mode-toggle { display: inline-block; margin-bottom: 14px; padding: 6px 12px; border: 1px solid var(--line); border-radius: 14px; background: transparent; color: var(--soft); font: 500 12px var(--font-sans); letter-spacing: .02em; cursor: pointer; transition: border-color .15s ease, color .15s ease; }
+.mode-toggle:hover { border-color: var(--accent); color: var(--accent); }
+
+/* Fixed dark background (not var(--bg)) -- the museum's interior stays a
+   consistent moody dark regardless of the site's light/dark toggle, since
+   a bright cream backdrop would flatten the gallery-spotlight look. */
+.scene3d { position: relative; width: 100%; height: 440px; border: 1px solid var(--line); border-radius: 4px; overflow: hidden; background: #06070a; cursor: pointer; user-select: none; touch-action: none; -webkit-tap-highlight-color: transparent; }
+#corridorCanvas { display: block; width: 100%; height: 100%; }
+
+/* Museum-placard fixed palette (slate/cream, matching the robot's own name
+   badge in the 3D scene) rather than the page's light/dark theme colors --
+   these read as exhibit cases, not page chrome, so they stay the same
+   regardless of the site's own theme toggle. */
+.exhibit-frame { position: relative; display: inline-flex; align-items: center; justify-content: center; border: 1px solid rgba(214, 210, 196, .22); border-radius: 6px; overflow: hidden; background: #262c34; }
+/* Shown at their own aspect ratio, not force-cropped into a uniform box --
+   a portrait shot and a landscape shot end up different sizes on purpose,
+   like real photos in a display case, only capped so nothing overwhelms
+   the page. */
+.exhibit-frame img { display: block; max-width: 100%; max-height: 380px; width: auto; height: auto; }
+.exhibit-placeholder { display: block; padding: 88px 56px; color: rgba(214, 210, 196, .45); font: 11px ui-monospace, 'SFMono-Regular', Menlo, Consolas, monospace; letter-spacing: .04em; }
+
+/* A faint scrim behind the caption text -- just enough to separate it from
+   a busy scene, deliberately kept subtle rather than a solid panel. Fixed
+   (not var(--ink)/var(--dim)) for the same reason as the museum's own
+   palette above: the 3D scene behind it is always dark regardless of the
+   site's theme, so in light mode the theme's dark ink color was rendering
+   nearly invisible against it with no backing at all -- this fixes that
+   light-theme contrast bug too, just without going fully opaque. */
+.caption-overlay { position: absolute; left: 50%; bottom: 16px; transform: translateX(-50%); z-index: 3; max-width: 82%; text-align: center; opacity: 0; transition: opacity .25s ease; pointer-events: none; background: rgba(6, 7, 10, .32); border: 1px solid rgba(255, 255, 255, .06); border-radius: 10px; padding: 10px 20px 12px; backdrop-filter: blur(4px); -webkit-backdrop-filter: blur(4px); box-shadow: 0 6px 18px rgba(0, 0, 0, .2); }
+.caption-overlay.visible { opacity: 1; }
+.caption-overlay .exhibit-year { display: block; color: var(--accent); font: 500 11px var(--font-sans); letter-spacing: .04em; text-transform: uppercase; }
+.caption-overlay .exhibit-title { margin: 2px 0 0; font-size: 15px; font-weight: 600; color: #f5f4f0; }
+.caption-overlay .exhibit-blurb { margin: 4px 0 0; color: rgba(245, 244, 240, .72); font-size: 12px; line-height: 1.35; }
+
+.look-prompt { position: absolute; inset: 0; z-index: 4; display: flex; align-items: center; justify-content: center; background: rgba(0,0,0,.28); pointer-events: none; }
+.look-prompt p { margin: 0; padding: 8px 14px; border: 1px solid var(--line); border-radius: 14px; background: var(--bg); color: var(--ink); font: 500 13px var(--font-sans); }
+
+.corridor-controls { display: none; position: fixed; right: calc(20px + env(safe-area-inset-right)); bottom: calc(14px + env(safe-area-inset-bottom)); z-index: 5; grid-template-columns: repeat(3, 50px); grid-template-rows: repeat(2, 50px); gap: 6px; pointer-events: none; }
+.dpad-btn { border-radius: 10px; border: 1px solid var(--line); background: var(--bg); color: var(--ink); font-size: 18px; line-height: 1; touch-action: none; user-select: none; -webkit-tap-highlight-color: transparent; pointer-events: auto; }
+.dpad-btn:active { border-color: var(--accent); color: var(--accent); }
+.dpad-forward { grid-column: 2; grid-row: 1; }
+.dpad-jump { grid-column: 3; grid-row: 1; }
+.dpad-left { grid-column: 1; grid-row: 2; }
+.dpad-right { grid-column: 3; grid-row: 2; }
+.dpad-back { grid-column: 2; grid-row: 2; }
+@media (max-width: 700px) { .corridor-controls.visible { display: grid; } }
+
+.exhibits-list .exhibit { position: static; width: 100%; height: auto; max-width: 420px; margin: 0 auto; display: none; flex-direction: column; align-items: center; text-align: center; transform: none !important; }
+.exhibits-list .exhibit.exhibit-active { display: flex; }
+.exhibits-list .exhibit-frame { max-width: 100%; }
+/* A small plaque under the photo, same fixed slate/cream + monospace
+   treatment as the frame above and the robot's badge in the 3D scene --
+   this is what gives list mode the same "museum placard" read as walking
+   the hallway, instead of looking like plain page copy under a photo. */
+.exhibits-list .exhibit-caption { display: block !important; opacity: 1; transform: none; width: 100%; margin-top: 10px; padding: 10px 16px 12px; background: #333f48; border: 1px solid rgba(214, 210, 196, .22); border-radius: 6px; font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; box-sizing: border-box; }
+.exhibits-list .exhibit-year { display: block; color: #d6d2c4; opacity: .65; font: 500 10px inherit; letter-spacing: .08em; text-transform: uppercase; }
+.exhibits-list .exhibit-title { margin: 4px 0 0; font-size: 15px; font-weight: 700; color: #d6d2c4; }
+.exhibits-list .exhibit-blurb { margin: 5px 0 0; color: rgba(214, 210, 196, .68); font-size: 12px; line-height: 1.4; }
+.fallback-nav { display: flex; align-items: center; justify-content: center; gap: 14px; margin-top: 20px; font: 500 12px ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; }
+.fallback-nav button { padding: 7px 14px; border: 1px solid rgba(214, 210, 196, .22); border-radius: 14px; background: #333f48; color: #d6d2c4; font: inherit; letter-spacing: .02em; cursor: pointer; transition: border-color .15s ease, opacity .15s ease; }
+.fallback-nav button:hover:not(:disabled) { border-color: var(--accent); }
+.fallback-nav button:disabled { opacity: .35; cursor: default; }
+.fallback-nav span { color: var(--dim); font-family: var(--font-sans); }
+
+.history-footer { border-top: 1px solid var(--line); margin-top: 32px; padding-top: 16px; }
+
+@media (max-width: 700px) { .scene3d { height: 340px; } }
+@media (max-height: 680px) and (min-width: 701px) { .scene3d { height: 340px; } }
