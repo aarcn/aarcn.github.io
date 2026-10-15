@@ -1,0 +1,118 @@
+<!doctype html>
+<html lang="en" class="homelab">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#000000">
+  <meta name="description" content="the computer in aaron's room that runs some of his stuff">
+  <title>homelab — aaronca.no</title>
+  <link rel="icon" type="image/svg+xml" href="favicon.svg">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cascadia+Mono:wght@300..700&display=swap">
+  <link rel="stylesheet" href="styles.css">
+  <link rel="stylesheet" href="homelab.css">
+</head>
+<body class="homelab">
+  <main class="page homelab-page">
+    <nav class="nav" aria-label="Main navigation">
+      <a class="logo" href="/"><span class="logo-name">aaron</span><span class="logo-domain">ca.no</span></a>
+      <div class="nav-right">
+        <a href="index.html">← back</a>
+      </div>
+    </nav>
+
+    <header class="lab-hero">
+      <div>
+        <span class="label">the server closet</span>
+        <h1>homelab</h1>
+        <p class="lab-intro">a computer in my room that runs some of my stuff. mostly here so i can learn how it all works, and break it.</p>
+        <p class="lab-status"><i></i>up since [month year], give or take a few reboots</p>
+      </div>
+      <pre class="lab-box" aria-hidden="true"> .-------------------------.
+ | <b class="led">o</b> <b class="led slow">o</b>  [|||||||||||]   :: |
+ |-------------------------|
+ | <b class="led late">o</b> o  [|||||||||||]   :: |
+ |-------------------------|
+ | o o  [           ]   :: |
+ '-------------------------'
+    ||                 ||</pre>
+    </header>
+
+    <article class="lab-notes">
+      <section>
+        <h2>why</h2>
+        <p>i wanted somewhere to dump my photos that wasn't someone else's cloud, and an excuse to actually learn proxmox, docker, and kubernetes instead of just putting them on a resume and hoping nobody asks. also i track a weird amount of data about my life — workouts, food, every skydive — and it needs to live somewhere i own.</p>
+        <p>it started as "i'll just get a NAS" and turned into a rack. this is apparently how it goes for everyone.</p>
+      </section>
+
+      <section>
+        <h2>how it's wired</h2>
+        <pre class="lab-diagram" aria-label="network diagram">internet
+   │
+[ router ]
+   └── [ opal, as an access point ]
+         └── [ switch ]
+               ├── [ the mini pc ]
+               │     ├── [ proxmox, running everything ]
+               │     └── [ k3s cluster ]
+               ├── [ a pi ]
+               └── [ whatever i'm messing with ]</pre>
+        <p class="lab-aside">this changes a lot. it's roughly right. tailscale gets me in from anywhere — my gaming pc is the subnet router for now, which means the lab goes down when i restart my pc. working on it.</p>
+      </section>
+
+      <section>
+        <h2>the hardware</h2>
+        <dl class="lab-specs">
+          <dt>box</dt><dd>dell optiplex micro 7020, i5-13500T, 24gb ddr5. headless, lives in a deskpi rackmate t1 (8U). picked it up locally.</dd>
+          <dt>disks</dt><dd>256gb nvme for proxmox, 2tb nvme for VMs and photos. two hard drives in a usb enclosure for backups.</dd>
+          <dt>os</dt><dd>proxmox ve. mostly LXC containers plus a couple VMs.</dd>
+          <dt>network</dt><dd>tp-link 8-port poe switch, gl.inet opal as the access point, tailscale for remote access.</dd>
+          <dt>backups</dt><dd>the usb drives. if the power goes out, everything just turns off. a ups is on the list.</dd>
+        </dl>
+      </section>
+
+      <section>
+        <h2>what's running</h2>
+        <ul class="lab-services">
+          <li><code>immich</code> photos and videos, replaces paying for cloud storage. lives in a debian vm.</li>
+          <li><code>mqtt</code> the message bus everything else talks over.</li>
+          <li><code>influxdb + grafana</code> dashboards for the data i track about my life.</li>
+          <li><code>haos</code> home assistant vm.</li>
+          <li><code>k3s</code> a kubernetes cluster, mostly so i can say i run a kubernetes cluster.</li>
+        </ul>
+      </section>
+
+      <section>
+        <h2>stuff i broke</h2>
+        <ol class="lab-log" reversed>
+          <li><time>day one</time><p>set the static ip on the wrong subnet during the proxmox install, then spent a while wondering why nothing could reach it. it was doing exactly what i told it to do.</p></li>
+        </ol>
+      </section>
+
+      <section>
+        <h2>the fan controller saga</h2>
+        <p>i wanted 40mm fans with rgb that pulses between orange and white. simple ask, i thought. my first plan was to plug the fans into a usb hub and have the mini pc control their speed and color. turns out usb fans only take power — there's no data line, so the pc can't tell them anything. also most 40mm fans are 12v and usb gives 5v, so they'd barely spin. strike one.</p>
+        <p>the real answer was a whole food chain: pwm for speed, an addressable data line for the rgb, and a microcontroller sitting in between to drive it all. so now there's an esp32 whose entire job is fans and lights. it talks over mqtt, which means the mini pc is still the one in charge — it just took three more hops than i expected.</p>
+        <p>the esp32 fought me too. i had one from a starter kit that i was convinced needed an expansion board i didn't have, so i never got it going. it didn't need one. that plus drivers, com ports that vanish mid-upload, and boot buttons held in the right order — flashing a microcontroller on windows is a ritual.</p>
+        <p>then i gave the controller a static ip, because that felt responsible. learned later that with mqtt only the broker needs a fixed address — everything else just dials out. it's on dhcp now and nothing cares.</p>
+        <p>current state: the controller is on the network and answering. also, 40mm fans whine if you run them fast, so they'll run slow and temperature-controlled. everything is a tradeoff.</p>
+      </section>
+
+      <section>
+        <h2>next</h2>
+        <p>finish the fan wall, a little circular lcd on the fan panel showing temps, and getting homelab stats onto my smart glasses. none of this is necessary. that's the point.</p>
+      </section>
+
+      <p class="lab-outro">configs will end up on <a href="https://github.com/aarcn" target="_blank" rel="noopener">github</a> eventually.</p>
+    </article>
+
+    <footer class="footer lab-footer">
+      <span>aaronca.no/homelab</span>
+      <span>© 2026</span>
+    </footer>
+  </main>
+  <script src="topo.js" defer></script>
+  <script src="script.js" defer></script>
+</body>
+</html>

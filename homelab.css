@@ -1,0 +1,56 @@
+html.homelab, body.homelab { height: auto; min-height: 100%; overflow: auto; }
+.homelab-page { height: auto; min-height: 100dvh; }
+.homelab { --led: #8FD0FF; }
+[data-theme="light"] .homelab { --led: #2F7FB8; }
+
+.lab-hero { display: flex; justify-content: space-between; align-items: flex-end; gap: 40px; padding: 28px 0 36px; border-bottom: 1px solid var(--line); }
+.lab-hero h1 { margin: 6px 0 0; font-size: clamp(40px, 8vw, 64px); font-weight: 700; letter-spacing: -.02em; line-height: 1; }
+.lab-intro { max-width: 440px; margin: 12px 0 0; color: var(--soft); font-size: 15px; line-height: 1.55; }
+.lab-status { margin: 16px 0 0; color: var(--dim); font: 11px var(--font); }
+.lab-status i { display: inline-block; width: 6px; height: 6px; margin: 0 8px 1px 0; border-radius: 50%; background: #72b68a; }
+
+/* little rack drawing, same family as the plane and robot on the home page */
+.lab-box { flex: none; margin: 0 0 4px; color: var(--dim); font: 13px/1.15 var(--font); user-select: none; }
+.lab-box b { font-weight: inherit; }
+.lab-box .led { color: var(--led); animation: led 1.6s steps(1) infinite; }
+.lab-box .slow { animation-duration: 3.1s; }
+.lab-box .late { animation-delay: .7s; animation-duration: 2.3s; }
+@keyframes led { 0%, 70% { opacity: 1; } 71%, 100% { opacity: .25; } }
+
+.lab-notes { max-width: 620px; padding: 12px 0 56px; }
+.lab-notes section { padding-top: 40px; }
+.lab-notes h2 { margin: 0 0 14px; font-size: 15px; font-weight: 600; letter-spacing: 0; }
+.lab-notes h2::before { content: '# '; color: var(--accent); font: 400 13px var(--font); }
+.lab-notes p { margin: 0; color: var(--soft); font-size: 15px; line-height: 1.65; }
+.lab-notes p + p { margin-top: 12px; }
+
+.lab-diagram { margin: 0; padding: 4px 0 4px 18px; border-left: 2px solid var(--line); overflow-x: auto; color: var(--soft); font: 13px/1.5 var(--font); }
+.lab-notes .lab-aside { margin-top: 10px; color: var(--dim); font-size: 13px; }
+
+.lab-specs { display: grid; grid-template-columns: 90px 1fr; gap: 8px 16px; margin: 0; font-size: 14px; line-height: 1.5; }
+.lab-specs dt { color: var(--dim); font: 12px/1.75 var(--font); }
+.lab-specs dd { margin: 0; color: var(--soft); }
+
+.lab-services { margin: 0; padding: 0; list-style: none; color: var(--soft); font-size: 14px; line-height: 1.5; }
+.lab-services li + li { margin-top: 8px; }
+.lab-services code { margin-right: 8px; color: var(--ink); font: 13px var(--font); }
+
+.lab-log { margin: 0; padding: 0; list-style: none; }
+.lab-log li { display: grid; grid-template-columns: 90px 1fr; gap: 16px; }
+.lab-log li + li { margin-top: 14px; }
+.lab-log time { color: var(--dim); font: 12px/1.9 var(--font); }
+.lab-notes .lab-log p { font-size: 14px; }
+
+.lab-notes .lab-outro { margin-top: 48px; color: var(--dim); font-size: 14px; }
+.lab-outro a { color: var(--soft); text-decoration: underline; text-decoration-color: var(--line); text-underline-offset: 3px; transition: color .15s ease, text-decoration-color .15s ease; }
+.lab-outro a:hover { color: var(--accent); text-decoration-color: currentColor; }
+
+.lab-footer { border-top: 1px solid var(--line); }
+
+@media (prefers-reduced-motion: reduce) { .lab-box .led { animation: none; } }
+@media (max-width: 700px) {
+  .lab-hero { display: block; padding-bottom: 28px; }
+  .lab-box { display: none; }
+  .lab-notes section { padding-top: 32px; }
+  .lab-specs, .lab-log li { grid-template-columns: 72px 1fr; gap: 6px 12px; }
+}

@@ -3,14 +3,16 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="theme-color" content="#333F48">
-  <meta name="description" content="a aronnnn">
+  <meta name="theme-color" content="#000000">
+  <meta name="description" content="Aaron's personal website.">
   <title>aaronca.no</title>
   <link rel="icon" type="image/svg+xml" href="favicon.svg">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cascadia+Mono:wght@300..700&display=swap">
   <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-  <div class="background-mark" aria-hidden="true">A</div>
   <div class="sky-scene" aria-hidden="true">
     <div class="flight">
        <pre class="plane"> __
@@ -23,14 +25,13 @@ X*#####*+^^\_\
     <span class="skydiver one">o-)-&lt;</span>
     <span class="skydiver two">o-)-&lt;</span>
     <span class="skydiver three">o-)-&lt;</span>
-    <span class="scene-status">BACKGROUND MOTION // ACTIVE</span>
   </div>
   <main class="page">
     <nav class="nav" aria-label="Main navigation">
       <a class="logo" href="/"><span class="logo-name">aaron</span><span class="logo-domain">ca.no</span></a>
       <div class="nav-right">
         <span class="location"><i></i> Austin, TX</span>
-        <a href="mailto:aaroncano@utexas.edu">contact <b>↗</b></a>
+        <a href="mailto:aaroncano@utexas.edu">email<b> ↗</b></a>
       </div>
     </nav>
 
@@ -39,6 +40,10 @@ X*#####*+^^\_\
         <h1 id="name">aaron</h1>
         <a class="explore-btn" href="history.html">explore my history →</a>
       </div>
+      <a class="homelab-callout" href="homelab.html">
+        <span class="homelab-text">check out how i'm hosting this website</span>
+        <img class="robot" src="media/towerrobot-web.png" alt="" width="482" height="640">
+      </a>
     </section>
 
     <section class="profile" aria-label="About Aaron">
@@ -50,7 +55,7 @@ X*#####*+^^\_\
       <div class="profile-block"></div>
       <div class="profile-block hobbies-block">
         <span class="label">things I like</span>
-        <div class="hobbies"><span class="hobby-wrap"><button type="button" class="hobby" data-clip="media/drums.mp4">drums</button></span><span class="hobby-wrap"><button type="button" class="hobby" data-clip="media/guitar.mp4">guitar</button></span><span class="hobby-wrap"><button type="button" class="hobby" data-clip="media/skydiving.mp4">skydiving</button></span></div>
+        <div class="hobbies"><span class="hobby-wrap"><button type="button" class="hobby" data-clip="media/drums.mp4">drums</button></span><span class="hobby-wrap"><button type="button" class="hobby" data-clip="media/cafo.mp4">guitar</button></span><span class="hobby-wrap"><button type="button" class="hobby" data-clip="media/skydiving.mp4">skydiving</button></span></div>
       </div>
     </section>
 
@@ -63,6 +68,7 @@ X*#####*+^^\_\
       <span>© 2026</span>
     </footer>
   </main>
+  <script src="topo.js" defer></script>
   <script src="script.js" defer></script>
 </body>
 </html>

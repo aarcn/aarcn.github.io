@@ -17,13 +17,13 @@ var EXHIBITS = [
     year: '2021',
     title: 'e.rip',
     blurb: 'Launched a bio-link website that grew to over 25,000 users.',
-    image: 'media/erip.jpg'
+    image: 'media/erip.jpeg'
   },
   {
     year: '2024',
     title: 'raccceTrack',
     blurb: 'Fought back against sweepstake casinos and turned losing games into +100% RTP opportunities.',
-    image: 'media/raccceTrack.jpg'
+    image: 'media/racccetrack.jpeg'
   },
   {
     year: 'x',
