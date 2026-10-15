@@ -54,3 +54,11 @@ html.homelab, body.homelab { height: auto; min-height: 100%; overflow: auto; }
   .lab-notes section { padding-top: 32px; }
   .lab-specs, .lab-log li { grid-template-columns: 72px 1fr; gap: 6px 12px; }
 }
+
+/* photos + video */
+.lab-figs { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-top: 18px; }
+.lab-figs.single { grid-template-columns: 1fr; }
+.lab-fig { margin: 0; }
+.lab-fig img, .lab-fig video { display: block; width: 100%; height: auto; border: 1px solid var(--line); border-radius: 6px; }
+.lab-notes .lab-fig figcaption { margin-top: 6px; color: var(--dim); font: 11px/1.5 var(--font); }
+@media (max-width: 700px) { .lab-figs { grid-template-columns: 1fr; } }

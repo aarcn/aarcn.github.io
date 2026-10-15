@@ -24,10 +24,9 @@
 
     <header class="lab-hero">
       <div>
-        <span class="label">the server closet</span>
         <h1>homelab</h1>
-        <p class="lab-intro">a computer in my room that runs some of my stuff. mostly here so i can learn how it all works, and break it.</p>
-        <p class="lab-status"><i></i>up since [month year], give or take a few reboots</p>
+        <p class="lab-intro">space heater that runs some of my QOL services.</p>
+        <p class="lab-status"><i></i>up since august 2026</p>
       </div>
       <pre class="lab-box" aria-hidden="true"> .-------------------------.
  | <b class="led">o</b> <b class="led slow">o</b>  [|||||||||||]   :: |
@@ -42,69 +41,89 @@
     <article class="lab-notes">
       <section>
         <h2>why</h2>
-        <p>i wanted somewhere to dump my photos that wasn't someone else's cloud, and an excuse to actually learn proxmox, docker, and kubernetes instead of just putting them on a resume and hoping nobody asks. also i track a weird amount of data about my life — workouts, food, every skydive — and it needs to live somewhere i own.</p>
-        <p>it started as "i'll just get a NAS" and turned into a rack. this is apparently how it goes for everyone.</p>
+        <p>I wanted somewhere to dump my photos that wasn't someone else's cloud, and an excuse to actually learn proxmox, docker, and kubernetes instead of just putting them on a resume and hoping nobody asks. Also i track a weird amount of data about my life — workouts, food, every skydive — and it needs to live somewhere i own.</p>
+        <p>It started as "i'll just get a NAS" and turned into a rack. This is apparently how it goes for everyone.</p>
       </section>
 
       <section>
         <h2>how it's wired</h2>
-        <pre class="lab-diagram" aria-label="network diagram">internet
-   │
-[ router ]
-   └── [ opal, as an access point ]
-         └── [ switch ]
-               ├── [ the mini pc ]
-               │     ├── [ proxmox, running everything ]
-               │     └── [ k3s cluster ]
-               ├── [ a pi ]
-               └── [ whatever i'm messing with ]</pre>
-        <p class="lab-aside">this changes a lot. it's roughly right. tailscale gets me in from anywhere — my gaming pc is the subnet router for now, which means the lab goes down when i restart my pc. working on it.</p>
+        <pre class="lab-diagram" aria-label="network diagram">
+LAN (apartment wall jack)
+ └── [ GL.iNet GL-SFT1200 (opal) ]
+       └── [ TP-Link TL-SG108PE (switch) ]
+             ├── [ Dell OptiPlex Micro 7020 ]
+             │     ├── [ proxmox ve ]
+             │     │     ├── vm   debian, running immich
+             │     │     ├── vm   home assistant os
+             │     │     ├── lxc  mqtt
+             │     │     └── lxc  vaultwarden (docker)
+             │     └── [ 2tb external hdd ]
+             └── [ pi 4 running influxdb + grafana ]</pre>
+        <p class="lab-aside">This changes a lot. It's roughly right. Tailscale gets me in from anywhere — my gaming pc is the subnet router for now, which means the lab goes down when i restart my pc. Working on it.</p>
       </section>
 
       <section>
         <h2>the hardware</h2>
         <dl class="lab-specs">
-          <dt>box</dt><dd>dell optiplex micro 7020, i5-13500T, 24gb ddr5. headless, lives in a deskpi rackmate t1 (8U). picked it up locally.</dd>
-          <dt>disks</dt><dd>256gb nvme for proxmox, 2tb nvme for VMs and photos. two hard drives in a usb enclosure for backups.</dd>
-          <dt>os</dt><dd>proxmox ve. mostly LXC containers plus a couple VMs.</dd>
-          <dt>network</dt><dd>tp-link 8-port poe switch, gl.inet opal as the access point, tailscale for remote access.</dd>
-          <dt>backups</dt><dd>the usb drives. if the power goes out, everything just turns off. a ups is on the list.</dd>
+          <dt>box</dt><dd>Dell optiplex micro 7020, i5-13500T, 24gb ddr5. Headless, lives in a deskpi rackmate t1 (8U). Picked it up locally.</dd>
+          <dt>disks</dt><dd>256gb nvme for proxmox, 2tb nvme for VMs and photos. Two hard drives in a usb enclosure for backups.</dd>
+          <dt>os</dt><dd>Proxmox ve. Mostly LXC containers plus a couple VMs.</dd>
+          <dt>network</dt><dd>TP-Link 8-port poe switch, gl.inet opal as the access point, tailscale for remote access.</dd>
+          <dt>backups</dt><dd>The usb drives. If the power goes out, everything just turns off. A ups is on the list.</dd>
         </dl>
+        <div class="lab-figs">
+          <figure class="lab-fig"><img src="media/empty.jpg" alt="empty 8U rack sitting on the desk" loading="lazy"><figcaption>Day one. Empty rack, big plans.</figcaption></figure>
+          <figure class="lab-fig"><img src="media/progress.jpg" alt="the rack now: patch panel, poe switch, optiplex, pdu" loading="lazy"><figcaption>Now: patch panel, poe switch, the 7020, pdu.</figcaption></figure>
+        </div>
       </section>
 
       <section>
         <h2>what's running</h2>
         <ul class="lab-services">
-          <li><code>immich</code> photos and videos, replaces paying for cloud storage. lives in a debian vm.</li>
-          <li><code>mqtt</code> the message bus everything else talks over.</li>
-          <li><code>influxdb + grafana</code> dashboards for the data i track about my life.</li>
-          <li><code>haos</code> home assistant vm.</li>
-          <li><code>k3s</code> a kubernetes cluster, mostly so i can say i run a kubernetes cluster.</li>
+          <li><code>immich</code> Photos and videos, replaces paying for cloud storage. Lives in a debian vm.</li>
+          <li><code>mqtt</code> The message bus everything else talks over.</li>
+          <li><code>influxdb + grafana</code> Dashboards for the data i track about my life.</li>
+          <li><code>haos</code> Home assistant vm.</li>
+          <li><code>vaultwarden</code> Self-hosted bitwarden, so my passwords live on my own hardware too. Runs in docker inside an lxc.</li>
         </ul>
       </section>
 
       <section>
         <h2>stuff i broke</h2>
         <ol class="lab-log" reversed>
-          <li><time>day one</time><p>set the static ip on the wrong subnet during the proxmox install, then spent a while wondering why nothing could reach it. it was doing exactly what i told it to do.</p></li>
+          <li><time>day one</time><p>Set the static ip on the wrong subnet during the proxmox install, then spent a while wondering why nothing could reach it. It was doing exactly what i told it to do.</p></li>
         </ol>
       </section>
 
       <section>
         <h2>the fan controller saga</h2>
-        <p>i wanted 40mm fans with rgb that pulses between orange and white. simple ask, i thought. my first plan was to plug the fans into a usb hub and have the mini pc control their speed and color. turns out usb fans only take power — there's no data line, so the pc can't tell them anything. also most 40mm fans are 12v and usb gives 5v, so they'd barely spin. strike one.</p>
-        <p>the real answer was a whole food chain: pwm for speed, an addressable data line for the rgb, and a microcontroller sitting in between to drive it all. so now there's an esp32 whose entire job is fans and lights. it talks over mqtt, which means the mini pc is still the one in charge — it just took three more hops than i expected.</p>
-        <p>the esp32 fought me too. i had one from a starter kit that i was convinced needed an expansion board i didn't have, so i never got it going. it didn't need one. that plus drivers, com ports that vanish mid-upload, and boot buttons held in the right order — flashing a microcontroller on windows is a ritual.</p>
-        <p>then i gave the controller a static ip, because that felt responsible. learned later that with mqtt only the broker needs a fixed address — everything else just dials out. it's on dhcp now and nothing cares.</p>
-        <p>current state: the controller is on the network and answering. also, 40mm fans whine if you run them fast, so they'll run slow and temperature-controlled. everything is a tradeoff.</p>
+        <p>I wanted 40mm fans with rgb that pulses between orange and white. Simple ask, i thought. My first plan was to plug the fans into a usb hub and have the mini pc control their speed and color. Turns out usb fans only take power — there's no data line, so the pc can't tell them anything. Also most 40mm fans are 12v and usb gives 5v, so they'd barely spin. Strike one.</p>
+        <p>The real answer was a whole food chain: pwm for speed, an addressable data line for the rgb, and a microcontroller sitting in between to drive it all. So now there's an esp32 whose entire job is fans and lights. It talks over mqtt, which means the mini pc is still the one in charge — it just took three more hops than i expected.</p>
+        <div class="lab-figs single">
+          <figure class="lab-fig"><img src="media/breadboard.jpg" alt="breadboard prototype: four fans lit up, a pile of jumper wires, and a round lcd showing the temperature" loading="lazy"><figcaption>The prototype. Four fans, a pile of jumpers, and the little lcd already reading temps.</figcaption></figure>
+        </div>
+        <p>The esp32 fought me too. I had one from a starter kit that i was convinced needed an expansion board i didn't have, so i never got it going. It didn't need one. That plus drivers, com ports that vanish mid-upload, and boot buttons held in the right order — flashing a microcontroller on windows is a ritual.</p>
+        <p>Then i gave the controller a static ip, because that felt responsible. Learned later that with mqtt only the broker needs a fixed address — everything else just dials out. It's on dhcp now and nothing cares.</p>
+        <p>Once the breadboard version worked, i soldered the whole thing onto protoboard so it could live in the rack without a bump undoing it.</p>
+        <div class="lab-figs">
+          <figure class="lab-fig"><img src="media/controllerfront.jpg" alt="the soldered controller board, front: esp32-c3 supermini and a usb-c breakout on protoboard" loading="lazy"><figcaption>The permanent one, front. ESP32-C3 supermini + usb-c power.</figcaption></figure>
+          <figure class="lab-fig"><img src="media/controllerback.jpg" alt="the back of the soldered controller board, hand-soldered traces and wires" loading="lazy"><figcaption>The back. Soldering is new to me. Be nice.</figcaption></figure>
+        </div>
+        <p>Current state: the controller is on the network and answering. Also, 40mm fans whine if you run them fast, so they'll run slow and temperature-controlled. Everything is a tradeoff.</p>
+        <div class="lab-figs single">
+          <figure class="lab-fig">
+            <video controls muted loop playsinline preload="metadata" poster="media/fancontrollerposter.jpg" src="media/fancontrollertimelapse.mp4"></video>
+            <figcaption>The whole build, sped up.</figcaption>
+          </figure>
+        </div>
       </section>
 
       <section>
         <h2>next</h2>
-        <p>finish the fan wall, a little circular lcd on the fan panel showing temps, and getting homelab stats onto my smart glasses. none of this is necessary. that's the point.</p>
+        <p>Finish the fan wall, a little circular lcd on the fan panel showing temps, and getting homelab stats onto my smart glasses. None of this is necessary. That's the point.</p>
       </section>
 
-      <p class="lab-outro">configs will end up on <a href="https://github.com/aarcn" target="_blank" rel="noopener">github</a> eventually.</p>
+      <p class="lab-outro">Configs will end up on <a href="https://github.com/aarcn" target="_blank" rel="noopener">github</a> eventually.</p>
     </article>
 
     <footer class="footer lab-footer">
