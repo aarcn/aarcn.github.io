@@ -58,7 +58,7 @@ LAN (apartment wall jack)
              │     │     ├── lxc  mqtt
              │     │     └── lxc  vaultwarden (docker)
              │     └── [ 2tb external hdd ]
-             └── [ pi 4 running influxdb + grafana ]</pre>
+             └── [ pc running influxdb + grafana ]</pre>
         <p class="lab-aside">This changes a lot. It's roughly right. Tailscale gets me in from anywhere — my gaming pc is the subnet router for now, which means the lab goes down when i restart my pc. Working on it.</p>
       </section>
 
@@ -71,8 +71,9 @@ LAN (apartment wall jack)
           <dt>network</dt><dd>TP-Link 8-port poe switch, gl.inet opal as the access point, tailscale for remote access.</dd>
           <dt>backups</dt><dd>The usb drives. If the power goes out, everything just turns off. A ups is on the list.</dd>
         </dl>
-        <div class="lab-figs">
+        <div class="lab-figs trio">
           <figure class="lab-fig"><img src="media/empty.jpg" alt="empty 8U rack sitting on the desk" loading="lazy"><figcaption>Day one. Empty rack, big plans.</figcaption></figure>
+          <figure class="lab-fig"><img src="media/printingintiw.jpg" alt="a freshly printed 1U rack panel next to a bambu lab printer at the campus makerspace" loading="lazy"><figcaption>Rack panels fresh off the printer at TIW.</figcaption></figure>
           <figure class="lab-fig"><img src="media/progress.jpg" alt="the rack now: patch panel, poe switch, optiplex, pdu" loading="lazy"><figcaption>Now: patch panel, poe switch, the 7020, pdu.</figcaption></figure>
         </div>
       </section>
@@ -109,18 +110,19 @@ LAN (apartment wall jack)
           <figure class="lab-fig"><img src="media/controllerfront.jpg" alt="the soldered controller board, front: esp32-c3 supermini and a usb-c breakout on protoboard" loading="lazy"><figcaption>The permanent one, front. ESP32-C3 supermini + usb-c power.</figcaption></figure>
           <figure class="lab-fig"><img src="media/controllerback.jpg" alt="the back of the soldered controller board, hand-soldered traces and wires" loading="lazy"><figcaption>The back. Soldering is new to me. Be nice.</figcaption></figure>
         </div>
-        <p>Current state: the controller is on the network and answering. Also, 40mm fans whine if you run them fast, so they'll run slow and temperature-controlled. Everything is a tradeoff.</p>
+        <p>Current state: it's in the rack. Four fans glowing, the little lcd reading temps, humidity, and fan speed. 40mm fans whine if you run them fast, so they run slow and temperature-controlled. Everything is a tradeoff.</p>
         <div class="lab-figs single">
           <figure class="lab-fig">
             <video controls muted loop playsinline preload="metadata" poster="media/fancontrollerposter.jpg" src="media/fancontrollertimelapse.mp4"></video>
             <figcaption>The whole build, sped up.</figcaption>
           </figure>
+          <figure class="lab-fig"><img src="media/hl.jpg" alt="the finished rack at night: grafana dashboard on the top screen, patch panel, and the fan wall glowing orange with the round lcd in the middle" loading="lazy"><figcaption>Installed. Fan wall glowing, lcd reading the room, grafana up top.</figcaption></figure>
         </div>
       </section>
 
       <section>
         <h2>next</h2>
-        <p>Finish the fan wall, a little circular lcd on the fan panel showing temps, and getting homelab stats onto my smart glasses. None of this is necessary. That's the point.</p>
+        <p>Getting homelab stats onto my smart glasses, a ups so a power blip isn't a full outage, and whatever breaks next. None of this is necessary. That's the point.</p>
       </section>
 
       <p class="lab-outro">Configs will end up on <a href="https://github.com/aarcn" target="_blank" rel="noopener">github</a> eventually.</p>
