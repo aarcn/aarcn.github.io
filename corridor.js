@@ -31,6 +31,26 @@ document.addEventListener('DOMContentLoaded', function () {
 
   if (!canvas || !sceneEl || !controls || !modeToggle || !data.length) return;
 
+  // Blurbs are plain text in history.js; any http(s) URL in one becomes a
+  // link that opens in a new tab. Built from text nodes, never innerHTML.
+  function fillBlurb(el, text) {
+    el.textContent = '';
+    var re = /https?:\/\/[^\s)]+/g, last = 0, m;
+    while ((m = re.exec(text))) {
+      el.appendChild(document.createTextNode(text.slice(last, m.index)));
+      var a = document.createElement('a');
+      a.href = m[0]; a.textContent = m[0]; a.target = '_blank'; a.rel = 'noopener';
+      el.appendChild(a);
+      last = m.index + m[0].length;
+    }
+    el.appendChild(document.createTextNode(text.slice(last)));
+  }
+  // Clicking a link in the 3D caption shouldn't also grab the mouse for
+  // looking around (or start a touch drag) -- the scene listens on its parent.
+  ['click', 'pointerdown'].forEach(function (type) {
+    overlayBlurb.addEventListener(type, function (e) { if (e.target.closest('a')) e.stopPropagation(); });
+  });
+
   var CORRIDOR_WIDTH = 560;
   var WALL_HEIGHT = 440;
   var EYE_HEIGHT = 140;
@@ -111,7 +131,7 @@ document.addEventListener('DOMContentLoaded', function () {
     title.className = 'exhibit-title'; title.textContent = item.title; title.tabIndex = -1;
     caption.appendChild(title);
     var blurb = document.createElement('p');
-    blurb.className = 'exhibit-blurb'; blurb.textContent = item.blurb;
+    blurb.className = 'exhibit-blurb'; fillBlurb(blurb, item.blurb);
     caption.appendChild(blurb);
     article.appendChild(caption);
 
@@ -849,7 +869,7 @@ document.addEventListener('DOMContentLoaded', function () {
     var e = exhibits[nearest];
     overlayYear.textContent = e.year;
     overlayTitle.textContent = e.title;
-    overlayBlurb.textContent = e.blurb;
+    fillBlurb(overlayBlurb, e.blurb);
     captionOverlay.hidden = false;
     captionOverlay.classList.add('visible');
   }

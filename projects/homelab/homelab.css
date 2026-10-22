@@ -17,7 +17,10 @@ html.homelab, body.homelab { height: auto; min-height: 100%; overflow: auto; }
 .lab-box .late { animation-delay: .7s; animation-duration: 2.3s; }
 @keyframes led { 0%, 70% { opacity: 1; } 71%, 100% { opacity: .25; } }
 
-.lab-notes { max-width: 680px; margin: 0 auto; padding: 12px 0 56px; }
+/* min-width: 0 — .page is a flex column, so without this the article's
+   min-width tracks the diagram pre's longest line and drags the whole
+   page wider than the phone screen (tiny horizontal scroll, clipped text). */
+.lab-notes { max-width: 680px; min-width: 0; margin: 0 auto; padding: 12px 0 56px; }
 .lab-notes section { padding-top: 40px; }
 .lab-notes h2 { margin: 0 0 14px; font-size: 15px; font-weight: 600; letter-spacing: 0; }
 .lab-notes h2::before { content: '# '; color: var(--accent); font: 400 13px var(--font); }
@@ -53,6 +56,8 @@ html.homelab, body.homelab { height: auto; min-height: 100%; overflow: auto; }
   .lab-box { display: none; }
   .lab-notes section { padding-top: 32px; }
   .lab-specs, .lab-log li { grid-template-columns: 72px 1fr; gap: 6px 12px; }
+  /* sized so the longest diagram line fits the phone screen with no scroll */
+  .lab-diagram { font-size: clamp(9px, 2.7vw, 13px); }
 }
 
 /* photos + video */
@@ -61,8 +66,11 @@ html.homelab, body.homelab { height: auto; min-height: 100%; overflow: auto; }
 .lab-fig { margin: 0; }
 .lab-fig img, .lab-fig video { display: block; width: 100%; height: auto; border: 1px solid var(--line); border-radius: 6px; }
 .lab-notes .lab-fig figcaption { margin-top: 6px; color: var(--dim); font: 11px/1.5 var(--font); }
-@media (max-width: 700px) { .lab-figs, .lab-figs.trio { grid-template-columns: 1fr; } }
+@media (max-width: 700px) { .lab-figs, .lab-figs.trio { grid-template-columns: 1fr; } .lab-figs.quad { grid-template-columns: repeat(2, 1fr); } }
 .lab-figs.single .lab-fig img { width: auto; max-width: 100%; max-height: 560px; margin: 0 auto; }
+.lab-figs.small .lab-fig img { max-width: min(480px, 100%); }
 .lab-figs.single .lab-fig figcaption { text-align: center; }
 .lab-figs.trio { grid-template-columns: repeat(3, 1fr); }
 .lab-figs.trio .lab-fig img { aspect-ratio: 3 / 4; object-fit: cover; }
+.lab-figs.quad { grid-template-columns: repeat(4, 1fr); }
+.lab-figs.quad .lab-fig img { aspect-ratio: 3 / 4; object-fit: cover; }

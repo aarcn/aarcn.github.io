@@ -1,0 +1,78 @@
+<!doctype html>
+<html lang="en" class="writeup">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#000000">
+  <meta name="description" content="a community-fed leaderboard tracker for sweepstakes-casino races">
+  <title>racccetrack — aaronca.no</title>
+  <link rel="icon" type="image/svg+xml" href="../../favicon.svg">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cascadia+Mono:wght@300..700&display=swap">
+  <link rel="stylesheet" href="../../styles.css">
+  <link rel="stylesheet" href="../writeup.css">
+</head>
+<body class="writeup">
+  <main class="page writeup-page">
+    <nav class="nav" aria-label="Main navigation">
+      <a class="logo" href="/"><span class="logo-name">aaron</span><span class="logo-domain">ca.no</span></a>
+      <div class="nav-right">
+        <a href="../">← back</a>
+      </div>
+    </nav>
+
+    <header class="proj-hero">
+      <span class="label">web app · 2024–2026</span>
+      <h1>raccceTrack</h1>
+      <p class="proj-intro">a community-fed leaderboard tracker for sweepstakes-casino "race" tournaments. one half of the +EV hunt — <a href="../slosh/">slosh</a> is the other.</p>
+    </header>
+
+    <article class="proj-notes">
+      <section>
+        <h2>the problem</h2>
+        <p>Sweepstakes casinos run recurring race tournaments — leaderboards with prize pools. The casino shows you the current race and then the data is gone: no history, no way to see how a player has done across races, no API. If you want to study races over time, you have to keep the data yourself.</p>
+        <p>And the reason to study them: with enough history you can see what scores actually win, who shows up, and which races pay out more than they cost to chase — the moments a "losing" casino game quietly crosses 100% RTP and becomes a +EV game. Spotting those moments is the whole point. <a href="../slosh/">Slosh</a> hunts the same thing at the blackjack tables.</p>
+      </section>
+
+      <section>
+        <h2>how the data gets in</h2>
+        <p>There's no official API, so the ingestion layer is people. Contributors run a tampermonkey userscript that captures the leaderboard JSON while they browse the casino normally, and POSTs it to the app with a per-contributor API key. The server takes it from there: browse races, open a tournament's full rankings, or pull up any player's history across every race in the database.</p>
+        <div class="proj-figs single">
+          <figure class="proj-fig"><img src="../../media/racccetrack.jpeg" alt="the racccetrack races dashboard listing tournaments with top scores, placements and prizes" loading="lazy"><figcaption>The races dashboard.</figcaption></figure>
+        </div>
+      </section>
+
+      <section>
+        <h2>the dedup problem</h2>
+        <p>The interesting engineering is in the upload path. The casino reuses tournament identifiers, so you can't trust the key to tell races apart — an incoming snapshot is matched to a stored race only if at least 50 of its player IDs overlap with what's already there. And since multiple contributors upload the same race at different times, a snapshot is only accepted when at least one position's score actually improved; otherwise the server shrugs: <code>{"status": "skipped", "reason": "no improved scores"}</code>. Newer snapshots wipe and replace the stored rankings, and player rows accumulate across races — which is what makes the per-player history pages possible.</p>
+      </section>
+
+      <section>
+        <h2>the rest of the toolkit</h2>
+        <p>The tracker wasn't alone. A companion CLI decodes the profile blob the casino's own client gets handed, strips out the personal data, and reports the numbers that actually matter for the hunt: your bet-to-buy ratio against the promo targets (2.5× and 3.0× — and exactly how far you are from hitting each one), plus whether the account is shadow-banned. You'd be surprised how much a casino tells you about yourself if you just decode what it's already sending.</p>
+        <p>The webapp went through two generations too — a local sqlite version first, then the deployed postgres version on replit.</p>
+      </section>
+
+      <section>
+        <h2>stack</h2>
+        <dl class="proj-specs">
+          <dt>backend</dt><dd>Python, FastAPI + uvicorn, SQLAlchemy, PostgreSQL. The whole server is one 241-line main.py.</dd>
+          <dt>frontend</dt><dd>Server-rendered jinja2 templates, hand-written css, dark theme.</dd>
+          <dt>ingestion</dt><dd>Tampermonkey userscript, distributed privately to contributors.</dd>
+          <dt>hosting</dt><dd>Replit autoscale deploy with managed postgres.</dd>
+          <dt>status</dt><dd>Offline at the moment — it ran through fall 2026 and the deploy has since lapsed.</dd>
+        </dl>
+        <p class="proj-aside">Why "raccce" with three c's? Great question.</p>
+      </section>
+    </article>
+
+    <footer class="footer proj-footer">
+      <span>aaronca.no/projects/racccetrack</span>
+      <span>© 2026</span>
+    </footer>
+  </main>
+  <script src="../../topo.js" defer></script>
+  <script src="../../script.js" defer></script>
+</body>
+</html>

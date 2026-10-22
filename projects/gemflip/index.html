@@ -1,0 +1,72 @@
+<!doctype html>
+<html lang="en" class="writeup">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#000000">
+  <meta name="description" content="a discord gambling bot: gem economy, p2p coinflips, real escrow">
+  <title>gemflip — aaronca.no</title>
+  <link rel="icon" type="image/svg+xml" href="../../favicon.svg">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cascadia+Mono:wght@300..700&display=swap">
+  <link rel="stylesheet" href="../../styles.css">
+  <link rel="stylesheet" href="../writeup.css">
+</head>
+<body class="writeup">
+  <main class="page writeup-page">
+    <nav class="nav" aria-label="Main navigation">
+      <a class="logo" href="/"><span class="logo-name">aaron</span><span class="logo-domain">ca.no</span></a>
+      <div class="nav-right">
+        <a href="../">← back</a>
+      </div>
+    </nav>
+
+    <header class="proj-hero">
+      <span class="label">discord bot · 2024</span>
+      <h1>GemFlip</h1>
+      <p class="proj-intro">a discord gambling bot: a gem economy with peer-to-peer coinflips, real escrow, a 4% house fee, and auto-updating leaderboards.</p>
+    </header>
+
+    <article class="proj-notes">
+      <section>
+        <h2>how a flip works</h2>
+        <p>Anyone can post a wager with <code>!coinflip 500</code>; anyone else can accept it. On accept, the bot spins up a private channel visible only to the two players and itself, builds the suspense with a five-second gif of a dog doing a backflip (load-bearing), flips, pays the winner 96% of the pot, and deletes the channel ten seconds later. The 4% house fee is disclosed right in the embed footer — "to cover transaction costs." A background task rebuilds the <code>#leaderboards</code> channel every sixty seconds: top balances, largest flips ever.</p>
+      </section>
+
+      <section>
+        <h2>the escrow is real</h2>
+        <p>The part i'd defend in a design review: money is never in limbo. Creating a flip debits you immediately. Cancelling refunds you. And the flip itself runs inside a try/except that refunds <em>both</em> players if anything throws mid-flip, with a <code>finally</code> that deletes the private channel no matter what. When people's balances are on the line, "the bot crashed" can't be allowed to mean "someone's gems vanished."</p>
+        <p>Deposits and withdrawals happened outside the bot, through discord tickets — the owner-only <code>!add_gems</code> and <code>!set_gems</code> commands were the mint.</p>
+      </section>
+
+      <section>
+        <h2>lessons, visible in the code</h2>
+        <ul class="proj-list">
+          <li><code>pings</code> Nearly every message the bot sends has mentions disabled. That's the kind of thorough you only get after a bot pings the wrong people once.</li>
+          <li><code>.env</code> The commit log includes ".env added to .gitnore" [sic] mid-week — the token near-miss every dev gets exactly one of.</li>
+          <li><code>min wager</code> A bug that's still in there: the check rejects wagers under 10, the error message says the minimum is 15. The code and the copy disagree, and nobody ever complained, which tells you something about how people read error messages.</li>
+          <li><code>architecture</code> bot.py and owner_commands.py import each other. It works because of import-order luck. Classic first-bot architecture, preserved honestly.</li>
+        </ul>
+      </section>
+
+      <section>
+        <h2>stack</h2>
+        <dl class="proj-specs">
+          <dt>bot</dt><dd>Python, discord.py, ~430 lines. Embeds configured from JSON; owner commands gated by is_owner.</dd>
+          <dt>data</dt><dd>SQLite — player stats (gems, wins, losses, total wagered, largest win) and a coinflip lifecycle table (open → pending → completed/cancelled).</dd>
+          <dt>status</dt><dd>Dormant since november 2024. Repo's private, so no source link — this page is the tour.</dd>
+        </dl>
+        <p class="proj-aside">On connect it prints "connected to Discord, hell yeah!" — which remains the correct emotion for a bot coming online.</p>
+      </section>
+    </article>
+
+    <footer class="footer proj-footer">
+      <span>aaronca.no/projects/gemflip</span>
+      <span>© 2026</span>
+    </footer>
+  </main>
+  <script src="../../topo.js" defer></script>
+  <script src="../../script.js" defer></script>
+</body>
+</html>

@@ -1,0 +1,58 @@
+/* Shared layout for project writeup pages (projects/<name>/index.html).
+   Same bones as the homelab page; homelab keeps its own homelab.css because
+   of its page-specific bits (rack drawing, led colors). */
+html.writeup, body.writeup { height: auto; min-height: 100%; overflow: auto; }
+.writeup-page { height: auto; min-height: 100dvh; }
+
+.proj-hero { padding: 28px 0 36px; border-bottom: 1px solid var(--line); }
+.proj-hero h1 { margin: 6px 0 0; font-size: clamp(40px, 8vw, 64px); font-weight: 700; letter-spacing: -.02em; line-height: 1; }
+.proj-intro { max-width: 480px; margin: 12px 0 0; color: var(--soft); font-size: 15px; line-height: 1.55; }
+.proj-meta { display: flex; flex-wrap: wrap; gap: 8px 20px; margin: 16px 0 0; color: var(--dim); font: 11px var(--font); }
+.proj-meta a { color: var(--soft); text-decoration: underline; text-decoration-color: var(--line); text-underline-offset: 3px; transition: color .15s ease, text-decoration-color .15s ease; }
+.proj-meta a:hover { color: var(--accent); text-decoration-color: currentColor; }
+.proj-meta b { color: var(--accent); font-weight: 400; }
+
+/* min-width: 0 — .page is a flex column; without this the article's
+   min-width tracks any <pre>'s longest line and forces a page-wide
+   horizontal scroll on phones (same fix as the homelab page). */
+.proj-notes { max-width: 680px; min-width: 0; margin: 0 auto; padding: 12px 0 56px; }
+.proj-notes section { padding-top: 40px; }
+.proj-notes h2 { margin: 0 0 14px; font-size: 15px; font-weight: 600; letter-spacing: 0; }
+.proj-notes h2::before { content: '# '; color: var(--accent); font: 400 13px var(--font); }
+.proj-notes p { margin: 0; color: var(--soft); font-size: 15px; line-height: 1.65; }
+.proj-notes p + p { margin-top: 12px; }
+.proj-notes code { color: var(--ink); font: 13px var(--font); }
+.proj-notes .proj-aside { margin-top: 10px; color: var(--dim); font-size: 13px; }
+
+.proj-diagram { margin: 0; padding: 4px 0 4px 18px; border-left: 2px solid var(--line); overflow-x: auto; color: var(--soft); font: 13px/1.5 var(--font); }
+
+.proj-specs { display: grid; grid-template-columns: 90px 1fr; gap: 8px 16px; margin: 0; font-size: 14px; line-height: 1.5; }
+.proj-specs dt { color: var(--dim); font: 12px/1.75 var(--font); }
+.proj-specs dd { margin: 0; color: var(--soft); }
+
+.proj-list { margin: 0; padding: 0; list-style: none; color: var(--soft); font-size: 14px; line-height: 1.5; }
+.proj-list li + li { margin-top: 8px; }
+.proj-list code { margin-right: 8px; }
+
+.proj-notes .proj-outro { margin-top: 48px; color: var(--dim); font-size: 14px; }
+.proj-outro a, .proj-notes section a { color: var(--soft); text-decoration: underline; text-decoration-color: var(--line); text-underline-offset: 3px; transition: color .15s ease, text-decoration-color .15s ease; }
+.proj-outro a:hover, .proj-notes section a:hover { color: var(--accent); text-decoration-color: currentColor; }
+
+.proj-footer { border-top: 1px solid var(--line); }
+
+/* photos */
+.proj-figs { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-top: 18px; }
+.proj-figs.single { grid-template-columns: 1fr; }
+.proj-fig { margin: 0; }
+.proj-fig img, .proj-fig video { display: block; width: 100%; height: auto; border: 1px solid var(--line); border-radius: 6px; }
+.proj-notes .proj-fig figcaption { margin-top: 6px; color: var(--dim); font: 11px/1.5 var(--font); }
+.proj-figs.single .proj-fig img { width: auto; max-width: 100%; max-height: 560px; margin: 0 auto; }
+.proj-figs.single .proj-fig figcaption { text-align: center; }
+
+@media (max-width: 700px) {
+  .proj-hero { padding-bottom: 28px; }
+  .proj-notes section { padding-top: 32px; }
+  .proj-specs { grid-template-columns: 72px 1fr; gap: 6px 12px; }
+  .proj-diagram { font-size: clamp(9px, 2.7vw, 13px); }
+  .proj-figs { grid-template-columns: 1fr; }
+}

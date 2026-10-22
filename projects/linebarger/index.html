@@ -1,0 +1,83 @@
+<!doctype html>
+<html lang="en" class="writeup">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#000000">
+  <meta name="description" content="internship tooling: scraping a county tax site and decoding property codes">
+  <title>linebarger — aaronca.no</title>
+  <link rel="icon" type="image/svg+xml" href="../../favicon.svg">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cascadia+Mono:wght@300..700&display=swap">
+  <link rel="stylesheet" href="../../styles.css">
+  <link rel="stylesheet" href="../writeup.css">
+</head>
+<body class="writeup">
+  <main class="page writeup-page">
+    <nav class="nav" aria-label="Main navigation">
+      <a class="logo" href="/"><span class="logo-name">aaron</span><span class="logo-domain">ca.no</span></a>
+      <div class="nav-right">
+        <a href="../">← back</a>
+      </div>
+    </nav>
+
+    <header class="proj-hero">
+      <span class="label">internship tooling · 2024</span>
+      <h1>linebarger</h1>
+      <p class="proj-intro">internal tools from my software internship at a tax-collection law firm: a scraper that triages delinquent property-tax accounts, and a chrome extension that decodes property codes.</p>
+      <p class="proj-meta"><a href="https://github.com/aarcn/lgbs" target="_blank" rel="noopener">lgbs on github<b> ↗</b></a><a href="https://github.com/aarcn/PID-to-TSC" target="_blank" rel="noopener">PID-to-TSC on github<b> ↗</b></a></p>
+    </header>
+
+    <article class="proj-notes">
+      <section>
+        <h2>the problem</h2>
+        <p>The firm collects delinquent property taxes. Before filing suit on a batch of accounts, somebody has to check each one against the county's public tax site: is it exempt, how much is due, which years are due, has anything been paid since the judgment. Doing that by hand means loading four pages per account and reading tables. A real batch from my input files: 43 accounts — 172 page loads. That's someone's whole day.</p>
+      </section>
+
+      <section>
+        <h2>lgbs</h2>
+        <p>So i wrote a python scraper. Feed it a list of account numbers and each account's judgment-year ranges, and for every account it pulls the four pages from the county site, parses the soup with BeautifulSoup and some regex, and spits out a CSV plus a color-coded console report: exemptions, total due, years due collapsed into ranges ("2010-2014, 2019"), last payment date, and a suit-type flag. The point is triage — it tallies the accounts that <em>aren't</em> worth pursuing (business personal property, mobile homes, judgment years already paid, invalid account numbers) so a human only looks at the rest.</p>
+        <p>Some of the domain logic is delightfully cursed: whether an account is BPP or a mobile home is encoded in specific digits of the account number itself, so the classifier is literally <code>account_number[5] == '9'</code>. That's not a hack, that's how the county numbers accounts. You just have to know.</p>
+        <div class="proj-figs single">
+          <figure class="proj-fig"><img src="../../media/lgbs.png" alt="the scraper's color-coded console output mid-run: account summaries with amounts due and flags" loading="lazy"><figcaption>The console report mid-run.</figcaption></figure>
+        </div>
+      </section>
+
+      <section>
+        <h2>fighting the county server</h2>
+        <p>The county's server speaks TLS so old that modern python refuses to shake hands with it. The fix lives in <code>web_scraper.py</code>: drop to a raw http client and set <code>ssl.OP_LEGACY_SERVER_CONNECT</code>. Government infrastructure is forever.</p>
+        <p>There's also a progress bar module whose per-tick sleep is a random delay with the comment <code># how long u wanna stall</code>. It looks cosmetic. It's also the politeness throttle between requests. Dual-purpose engineering.</p>
+      </section>
+
+      <section>
+        <h2>PID-to-TSC</h2>
+        <p>The second tool is a manifest v3 chrome extension. Appraisal-district property pages show a bare "State Code" like <code>A1</code>, and nobody memorizes all seventy of them. One click injects a script into the page, finds the code, and translates it — "A1 → Real, Residential, Single-Family" — from an embedded lookup table. Nine commits over four days in january 2025. Sometimes a tool is just a lookup table with a button, and that's enough.</p>
+      </section>
+
+      <section>
+        <h2>milestones</h2>
+        <p>The first commit of lgbs, october 2024, is message-for-message my first git commit ever: <code>"uploading all files to github repo first commit ever in my life"</code>. The commit messages that follow chart the learning curve — <code>"hell yeah cimmot"</code>, <code>"f it"</code>, <code>"final perchance?"</code> — though there was, to my credit, a real branch-and-merge workflow attempt on day one.</p>
+        <p>Full disclosure: the public repo is the sanitized show copy — real account data was scrubbed before publishing, and a later cleanup pass renamed a bunch of functions in the modules without updating <code>main.py</code>, so the github version doesn't actually run as-is. A working checkout from before the rename pass still lives on my laptop — complete with a <code>graveyard/</code> folder of abandoned first attempts. The lesson about running your code after refactoring it has since been learned.</p>
+        <p>There was also an OCR side of the internship — the "cool OCR stuff" — that never made it to github.</p>
+      </section>
+
+      <section>
+        <h2>stack</h2>
+        <dl class="proj-specs">
+          <dt>lgbs</dt><dd>Python, BeautifulSoup4, colorama, raw http.client with the legacy-TLS workaround. Output to CSV.</dd>
+          <dt>pid-to-tsc</dt><dd>Vanilla javascript chrome extension, manifest v3, chrome.scripting injection.</dd>
+          <dt>status</dt><dd>Retired — internship tooling, last touched early 2025. Both repos public.</dd>
+        </dl>
+      </section>
+    </article>
+
+    <footer class="footer proj-footer">
+      <span>aaronca.no/projects/linebarger</span>
+      <span>© 2026</span>
+    </footer>
+  </main>
+  <script src="../../topo.js" defer></script>
+  <script src="../../script.js" defer></script>
+</body>
+</html>

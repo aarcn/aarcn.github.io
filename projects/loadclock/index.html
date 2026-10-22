@@ -1,0 +1,79 @@
+<!doctype html>
+<html lang="en" class="writeup">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#000000">
+  <meta name="description" content="a live jump-load board and winds-aloft display for my smart glasses">
+  <title>loadclock — aaronca.no</title>
+  <link rel="icon" type="image/svg+xml" href="../../favicon.svg">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cascadia+Mono:wght@300..700&display=swap">
+  <link rel="stylesheet" href="../../styles.css">
+  <link rel="stylesheet" href="../writeup.css">
+</head>
+<body class="writeup">
+  <main class="page writeup-page">
+    <nav class="nav" aria-label="Main navigation">
+      <a class="logo" href="/"><span class="logo-name">aaron</span><span class="logo-domain">ca.no</span></a>
+      <div class="nav-right">
+        <a href="../">← back</a>
+      </div>
+    </nav>
+
+    <header class="proj-hero">
+      <span class="label">smart glasses app · 2026</span>
+      <h1>loadclock</h1>
+      <p class="proj-intro">skydive spaceland's live load board and a winds-aloft display, on my even realities g2 glasses. the project where the skydiving and the glasses finally meet. sibling of <a href="../now-playing/">now-playing</a>.</p>
+    </header>
+
+    <article class="proj-notes">
+      <section>
+        <h2>why</h2>
+        <p>At the dropzone you live by the load clock: which load you're on, how many slots are open, how long until the plane leaves. Spaceland puts all of that on a TV and a web page — which means at the exact moment you're gearing up, checking it means digging out your phone with a rig on. I wear the glasses anyway. The clock should just be in them.</p>
+        <div class="proj-figs single">
+          <figure class="proj-fig"><img src="../../media/spacelandhud1.jpg" alt="through the glasses lens: san marcos conditions up top, two otter loads with open slots and departure clocks, flown-today count" loading="lazy"><figcaption>Through the lens: conditions, two loads up, 19 flown today.</figcaption></figure>
+        </div>
+      </section>
+
+      <section>
+        <h2>reverse-engineering the clock</h2>
+        <p>There's no API, but the DZ's web clock has to get its data somehow. So the first file in this project was <code>probe.cjs</code> — a sniffing script that pretends to be the clock's own web page (same origin, same referer) and logs every packet that comes down. The answer: a socket.io v2 feed (it has to be v2 — the server speaks the old EIO=3 protocol) pushing live load data — load number, slots remaining, departure time, plane, status — plus a weather channel with wind speed, direction, and temperature. The status constants came from reading the clock's own frontend code; that's how you learn that HOLD is a 5.</p>
+        <p>Four dropzones are configured — san marcos, houston, dallas, clewiston — with coordinates borrowed from a community dropzone geojson.</p>
+      </section>
+
+      <section>
+        <h2>winds aloft, done properly</h2>
+        <p>The weather channel covers ground winds; jumpers also care what the air is doing on the way down. So the app pulls Open-Meteo's pressure-level forecasts from the surface up to ~18,000 ft and interpolates them to every 1,000 ft AGL — converting geopotential heights from MSL to AGL per-dropzone, since "12,000 ft" means something different over san marcos than over sea-level florida.</p>
+        <p>The detail i'm happiest with: wind direction is interpolated as u/v vectors, not degrees — so interpolating between 350° and 10° correctly passes through north instead of swinging 180° through south. And every fetch carries a 15-second abort timeout, because a hung weather request should never freeze the load board.</p>
+      </section>
+
+      <section>
+        <h2>on the glasses</h2>
+        <p>Everything renders to bitmaps for the monochrome display: the load list, a wind table with 5/10/20-minute averages and gusts, the trend, a compass, and a wind-history graph.</p>
+        <div class="proj-figs">
+          <figure class="proj-fig"><img src="../../media/spacelandhud3.jpg" alt="close-up of the wind screen: averages and gusts table, trend, direction range, compass, and a wind history graph" loading="lazy"><figcaption>The wind screen up close: averages, gusts, trend, compass, history.</figcaption></figure>
+          <figure class="proj-fig"><img src="../../media/spacelandhud2.jpg" alt="the same wind screen through the glasses lens" loading="lazy"><figcaption>Same screen, through the lens.</figcaption></figure>
+        </div>
+      </section>
+
+      <section>
+        <h2>stack</h2>
+        <dl class="proj-specs">
+          <dt>app</dt><dd>Typescript + vite, ~660 lines. Even hub sdk, packed to an .ehpk and sideloaded, same pipeline as now-playing.</dd>
+          <dt>data</dt><dd>The DZ clock's socket.io v2 feed (reverse-engineered) + open-meteo pressure-level forecasts.</dd>
+          <dt>status</dt><dd>On my glasses at the DZ. Not on github yet — it currently exists on exactly one laptop, which is a problem i should fix.</dd>
+        </dl>
+      </section>
+    </article>
+
+    <footer class="footer proj-footer">
+      <span>aaronca.no/projects/loadclock</span>
+      <span>© 2026</span>
+    </footer>
+  </main>
+  <script src="../../topo.js" defer></script>
+  <script src="../../script.js" defer></script>
+</body>
+</html>

@@ -3,7 +3,7 @@
 var EXHIBITS = [
   {
     year: '2014',
-    title: 'my start in robotics',
+    title: 'my start in tech',
     blurb: 'Hey look! I programmed an Aldebaran Robotics Nao when I was 8!',
     image: 'media/nao.jpg'
   },
@@ -21,15 +21,15 @@ var EXHIBITS = [
   },
   {
     year: '2024',
+    title: 'Linebarger',
+    blurb: 'Automated judgment scraping and worked on some cool OCR stuff!',
+    image: 'media/lgbs.png'
+  },
+    {
+    year: '2024',
     title: 'raccceTrack',
     blurb: 'Fought back against sweepstake casinos and turned losing games into +100% RTP opportunities.',
     image: 'media/racccetrack.jpeg'
-  },
-  {
-    year: 'x',
-    title: 'x',
-    blurb: 'x',
-    image: null
   },
   {
     year: 'x',

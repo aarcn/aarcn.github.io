@@ -1,0 +1,86 @@
+<!doctype html>
+<html lang="en" class="writeup">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#000000">
+  <meta name="description" content="a full spotify controller for even realities g2 smart glasses">
+  <title>now-playing — aaronca.no</title>
+  <link rel="icon" type="image/svg+xml" href="../../favicon.svg">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cascadia+Mono:wght@300..700&display=swap">
+  <link rel="stylesheet" href="../../styles.css">
+  <link rel="stylesheet" href="../writeup.css">
+</head>
+<body class="writeup">
+  <main class="page writeup-page">
+    <nav class="nav" aria-label="Main navigation">
+      <a class="logo" href="/"><span class="logo-name">aaron</span><span class="logo-domain">ca.no</span></a>
+      <div class="nav-right">
+        <a href="../">← back</a>
+      </div>
+    </nav>
+
+    <header class="proj-hero">
+      <span class="label">smart glasses app · 2026</span>
+      <h1>now-playing</h1>
+      <p class="proj-intro">a full spotify controller for my even realities g2 smart glasses: now playing, time-synced lyrics, gestures, and the whole library, on a monochrome heads-up display.</p>
+      <p class="proj-meta"><a href="https://github.com/aarcn/now-playing" target="_blank" rel="noopener">view source on github<b> ↗</b></a><a href="https://aaronca.no/now-playing/" target="_blank" rel="noopener">the live app<b> ↗</b></a></p>
+    </header>
+
+    <article class="proj-notes">
+      <section>
+        <h2>what it does</h2>
+        <p>The glasses show the current song, artist, progress, what's up next, and lyrics that scroll in sync. Tap to play/pause, swipe for next/restart/previous, double-tap for a menu that reaches the entire library — playlists, albums, artists, podcasts, the queue, spotify connect device switching, volume, seek. It runs inside the even realities phone app and deploys straight from github pages; you sideload it onto the glasses with a QR code.</p>
+        <div class="proj-figs single">
+          <figure class="proj-fig"><img src="../../media/nowplayinghud.jpg" alt="the glasses display playing maniac by michael sembello: dithered album art, play state, progress bar, next up, and the current lyric line" loading="lazy"><figcaption>The display itself: dithered cover, progress, next up, synced lyrics.</figcaption></figure>
+        </div>
+      </section>
+
+      <section>
+        <h2>everything that fought back</h2>
+        <p>This project is mostly a list of platform fights, each with a workaround shipped:</p>
+        <ul class="proj-list">
+          <li><code>5-user cap</code> Spotify development-mode apps max out at 5 users, so every user brings their own free spotify app and connects it with PKCE — no shared secret anywhere.</li>
+          <li><code>oauth in a webview</code> Google/apple/facebook sign-in is blocked inside the even app's webview, so there's a "copy sign-in key" escape hatch: connect in your phone's real browser, carry the key across.</li>
+          <li><code>lyrics</code> Spotify's own lyrics ride a private endpoint that would break ToS, so lyrics come from LRCLIB, a community database, with LRC timestamps binary-searched for the current line.</li>
+          <li><code>liked songs</code> Can't be played as one context via the API, so shuffle plays a random 50-song stretch instead. Documented limitation, not a bug. Mostly.</li>
+          <li><code>hardware</code> Swipes don't report which arm of the glasses they came from, but taps do — so tap actions are configurable per arm and swipe actions aren't.</li>
+        </ul>
+        <div class="proj-figs single">
+          <figure class="proj-fig"><img src="../../media/nowplayingapp.jpg" alt="the phone-side setup screen: connect spotify with your own client id, sign-in key fallback, gesture reference" loading="lazy"><figcaption>The result of the 5-user cap: everyone brings their own spotify app.</figcaption></figure>
+        </div>
+      </section>
+
+      <section>
+        <h2>album art in 16 shades of green</h2>
+        <p>The display is monochrome green with 16 luminance levels. Naively mapping album covers onto that comes out muddy, so the art pipeline crops, contrast-stretches, then runs Floyd-Steinberg dithering to fake smooth gradients out of 16 shades. There's also a retry budget: after three straight failed cover downloads it stops trying, because a music app that hammers a dead CDN is worse than one with no art.</p>
+        <p>Text has its own pipeline — titles get sanitized for the glasses' font, and pixel widths are estimated from measurements taken off simulator screenshots via a purpose-built calibration page. You know a display is weird when you need a calibration page.</p>
+      </section>
+
+      <section>
+        <h2>testing it without glasses on</h2>
+        <p>The part i'm proudest of: a stateful mock of the spotify API, including spotify's real propagation delay before it reports your own changes back to you. End-to-end scenarios run against the simulator and inject faults — rate limiting, 502s, a request that simply never answers, an expired token racing a rotated refresh token. The glasses are the one place you really don't want to debug a hang.</p>
+      </section>
+
+      <section>
+        <h2>stack</h2>
+        <dl class="proj-specs">
+          <dt>app</dt><dd>Typescript + vite, ~2,500 lines. Two surfaces from one codebase: the phone webview UI and the glasses render loop.</dd>
+          <dt>apis</dt><dd>Spotify web API (PKCE oauth), LRCLIB for lyrics, the even realities G2 bridge.</dd>
+          <dt>deploy</dt><dd>Github pages via actions on every push; the hosted build is the sideload target.</dd>
+          <dt>status</dt><dd>Live — it's what's on my glasses right now.</dd>
+        </dl>
+      </section>
+    </article>
+
+    <footer class="footer proj-footer">
+      <span>aaronca.no/projects/now-playing</span>
+      <span>© 2026</span>
+    </footer>
+  </main>
+  <script src="../../topo.js" defer></script>
+  <script src="../../script.js" defer></script>
+</body>
+</html>

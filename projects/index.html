@@ -1,0 +1,140 @@
+<!doctype html>
+<html lang="en" class="projects">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#000000">
+  <meta name="description" content="things aaron has built">
+  <title>projects — aaronca.no</title>
+  <link rel="icon" type="image/svg+xml" href="../favicon.svg">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cascadia+Mono:wght@300..700&display=swap">
+  <link rel="stylesheet" href="../styles.css">
+  <link rel="stylesheet" href="projects.css">
+</head>
+<body class="projects">
+  <main class="page projects-page">
+    <nav class="nav" aria-label="Main navigation">
+      <a class="logo" href="/"><span class="logo-name">aaron</span><span class="logo-domain">ca.no</span></a>
+      <div class="nav-right">
+        <a href="../">← back</a>
+      </div>
+    </nav>
+
+    <header class="projects-hero">
+      <span class="label">things i've built</span>
+      <h1>projects</h1>
+      <p class="projects-intro">click a card for the full breakdown. more writeups on the way.</p>
+    </header>
+
+    <section class="cards" aria-label="Projects">
+      <a class="project-card" href="homelab/">
+        <img class="card-img" src="../media/hl.jpg" alt="the homelab rack at night, fan wall glowing orange, grafana up top" loading="lazy">
+        <div class="card-body">
+          <div class="card-head"><h2 class="card-title">homelab</h2><span class="card-year">2026</span></div>
+          <p class="card-blurb">Space heater that runs some of my QOL services. A rack, a mini pc, and a fan controller nobody asked for.</p>
+          <ul class="card-tags"><li>proxmox</li><li>docker</li><li>esp32</li><li>mqtt</li></ul>
+        </div>
+      </a>
+
+      <a class="project-card" href="now-playing/">
+        <img class="card-img" src="../media/nowplaying.jpg" alt="the glasses display playing maniac: dithered album art, progress bar, next up, and a synced lyric line in green" loading="lazy">
+        <div class="card-body">
+          <div class="card-head"><h2 class="card-title">now-playing</h2><span class="card-year">2026</span></div>
+          <p class="card-blurb">A full Spotify controller for my smart glasses — lyrics, gestures, and dithered album art in 16 shades of green.</p>
+          <ul class="card-tags"><li>typescript</li><li>spotify api</li><li>oauth pkce</li><li>smart glasses</li></ul>
+        </div>
+      </a>
+
+      <a class="project-card" href="loadclock/">
+        <img class="card-img" src="../media/spacelandhud3.jpg" alt="close-up of the loadclock wind screen: wind table, compass, and history graph in green" loading="lazy">
+        <div class="card-body">
+          <div class="card-head"><h2 class="card-title">loadclock</h2><span class="card-year">2026</span></div>
+          <p class="card-blurb">Spaceland's load board + winds aloft on my glasses, reverse-engineered from the dropzone's own web clock.</p>
+          <ul class="card-tags"><li>typescript</li><li>socket.io</li><li>open-meteo</li><li>smart glasses</li></ul>
+        </div>
+      </a>
+
+      <a class="project-card" href="https://github.com/aarcn/aarcn.github.io" target="_blank" rel="noopener">
+        <img class="card-img" src="../media/website.jpg" alt="the homepage of this website: ascii plane, skydivers, topo background" loading="lazy">
+        <div class="card-body">
+          <div class="card-head"><h2 class="card-title">this website<b> ↗</b></h2><span class="card-year">2026</span></div>
+          <p class="card-blurb">The site you're on. Ascii skydivers, a topo background, and a walkable 3d museum. View the source on github.</p>
+          <ul class="card-tags"><li>html/css/js</li><li>three.js</li></ul>
+        </div>
+      </a>
+
+      <a class="project-card" href="slosh/">
+        <img class="card-img" src="../media/slosh1.jpg" alt="the slosh gui: card grid, depletion bars, live side-bet rtp" loading="lazy">
+        <div class="card-body">
+          <div class="card-head"><h2 class="card-title">slosh</h2><span class="card-year">2025</span></div>
+          <p class="card-blurb">Live blackjack side-bet pricing from a depleted shoe — the math that turns losing games into +100% RTP opportunities.</p>
+          <ul class="card-tags"><li>python</li><li>tkinter</li><li>probability</li><li>card counting</li></ul>
+        </div>
+      </a>
+
+      <a class="project-card" href="racccetrack/">
+        <img class="card-img" src="../media/racccetrack.jpeg" alt="racccetrack races dashboard with tournament results" loading="lazy">
+        <div class="card-body">
+          <div class="card-head"><h2 class="card-title">raccceTrack</h2><span class="card-year">2024</span></div>
+          <p class="card-blurb">Community-fed tracker for sweepstakes-casino races — the data that shows when a race turns +EV. No API, so the users are the API.</p>
+          <ul class="card-tags"><li>python</li><li>fastapi</li><li>postgres</li><li>tampermonkey</li></ul>
+        </div>
+      </a>
+
+      <a class="project-card" href="linebarger/">
+        <img class="card-img" src="../media/lgbs.png" alt="lgbs scraper console output" loading="lazy">
+        <div class="card-body">
+          <div class="card-head"><h2 class="card-title">Linebarger</h2><span class="card-year">2024</span></div>
+          <p class="card-blurb">Internship tooling: bulk-triaging delinquent tax accounts from a county server that barely speaks TLS.</p>
+          <ul class="card-tags"><li>python</li><li>beautifulsoup</li><li>chrome extension</li></ul>
+        </div>
+      </a>
+
+      <a class="project-card" href="gemflip/">
+        <img class="card-img" src="../media/gemflip.jpg" alt="stylized terminal rendering of a gemflip coinflip: wager escrowed, accepted, flipped, winner paid 96%" loading="lazy">
+        <div class="card-body">
+          <div class="card-head"><h2 class="card-title">GemFlip</h2><span class="card-year">2024</span></div>
+          <p class="card-blurb">A discord gambling economy: p2p coinflips in private channels, escrow that refunds on failure, and a 4% house fee.</p>
+          <ul class="card-tags"><li>python</li><li>discord.py</li><li>sqlite</li><li>virtual economy</li></ul>
+        </div>
+      </a>
+
+      <a class="project-card" href="lamar-academy/">
+        <img class="card-img" src="../media/lamar.jpg" alt="the lamar.academy page: teal typewriter header, social icons, link bubbles" loading="lazy">
+        <div class="card-body">
+          <div class="card-head"><h2 class="card-title">lamar.academy</h2><span class="card-year">2022</span></div>
+          <p class="card-blurb">A link-in-bio hub for my high school, on its own vanity domain. The url now belongs to a london beauty clinic.</p>
+          <ul class="card-tags"><li>html/css</li><li>github pages</li><li>custom domain</li></ul>
+        </div>
+      </a>
+
+      <a class="project-card" href="erip/">
+        <img class="card-img" src="../media/erip.jpeg" alt="an e.rip stats panel showing tracked pageviews and qr codes" loading="lazy">
+        <div class="card-body">
+          <div class="card-head"><h2 class="card-title">e.rip</h2><span class="card-year">2021</span></div>
+          <p class="card-blurb">Bio-link website that grew to over 25,000 users. White-labeled engine, custom badge layer, eventually sold.</p>
+          <ul class="card-tags"><li>html/css</li><li>white-label</li><li>community</li></ul>
+        </div>
+      </a>
+
+      <a class="project-card" href="../stc/">
+        <img class="card-img" src="../media/stc.jpg" alt="the first stc summer camp cohort" loading="lazy">
+        <div class="card-body">
+          <div class="card-head"><h2 class="card-title">STC summer camp</h2><span class="card-year">2015</span></div>
+          <p class="card-blurb">The summer camp I helped launch with Dr. Carlos Margo. First cohort pictured.</p>
+          <ul class="card-tags"><li>teaching</li></ul>
+        </div>
+      </a>
+    </section>
+
+    <footer class="footer projects-footer">
+      <span>aaronca.no/projects</span>
+      <span>© 2026</span>
+    </footer>
+  </main>
+  <script src="../topo.js" defer></script>
+  <script src="../script.js" defer></script>
+</body>
+</html>

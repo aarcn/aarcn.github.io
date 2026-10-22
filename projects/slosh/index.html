@@ -1,0 +1,77 @@
+<!doctype html>
+<html lang="en" class="writeup">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#000000">
+  <meta name="description" content="a live blackjack card-counting assistant that prices side bets in real time">
+  <title>slosh — aaronca.no</title>
+  <link rel="icon" type="image/svg+xml" href="../../favicon.svg">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cascadia+Mono:wght@300..700&display=swap">
+  <link rel="stylesheet" href="../../styles.css">
+  <link rel="stylesheet" href="../writeup.css">
+</head>
+<body class="writeup">
+  <main class="page writeup-page">
+    <nav class="nav" aria-label="Main navigation">
+      <a class="logo" href="/"><span class="logo-name">aaron</span><span class="logo-domain">ca.no</span></a>
+      <div class="nav-right">
+        <a href="../">← back</a>
+      </div>
+    </nav>
+
+    <header class="proj-hero">
+      <span class="label">probability tool · 2025</span>
+      <h1>slosh</h1>
+      <p class="proj-intro">a live blackjack card-counting assistant that prices side bets in real time. one half of the +EV hunt — <a href="../racccetrack/">racccetrack</a> is the other.</p>
+      <p class="proj-meta"><a href="https://github.com/aarcn/slosh" target="_blank" rel="noopener">view source on github<b> ↗</b></a></p>
+    </header>
+
+    <article class="proj-notes">
+      <section>
+        <h2>the idea</h2>
+        <p>Blackjack side bets are designed to be terrible. Lucky Ladies — a bet that your first two cards total 20 — returns about 81.7% of your money off a fresh 8-deck shoe. But the printed odds assume a fresh shoe, and a shoe stops being fresh immediately. If the right cards are still clustered in what's left (say, a suspicious number of queens), the live odds can drift way up from the printed ones — past break-even. A side bet above 100% RTP is just a +EV game wearing a bad costume. Slosh exists to tell you the moment that happens.</p>
+      </section>
+
+      <section>
+        <h2>how it works</h2>
+        <p>It's a python desktop app you drive while watching a table. You key in cards as they're dealt and it maintains a count of every specific card remaining in the shoe — not just hi-lo buckets, the actual queen of hearts. From that, each side-bet module walks the combinatorics of drawing two cards from what's left (pure <code>math.comb</code>, no simulation) and folds in the paytable, so the screen shows live RTP next to the theoretical fresh-shoe RTP for lucky ladies, pairs, and the poker bet.</p>
+        <p>It also runs a conventional hi-lo true count on top, with basic-strategy advice that switches to the Illustrious 18 deviations once the count crosses the right thresholds. Charts sourced from Wizard of Odds, like all respectable degeneracy.</p>
+        <div class="proj-figs">
+          <figure class="proj-fig"><img src="../../media/slosh1.jpg" alt="the slosh gui: card input grid with per-rank depletion bars and live side-bet rtp readouts" loading="lazy"><figcaption>Card grid, depletion bars, live RTP.</figcaption></figure>
+          <figure class="proj-fig"><img src="../../media/slosh2.jpg" alt="another view of the slosh gui showing strategy advice and count information" loading="lazy"><figcaption>Count + strategy view.</figcaption></figure>
+        </div>
+      </section>
+
+      <section>
+        <h2>the queen bug</h2>
+        <p>The best bug: lucky ladies pays on tiers — queen-of-hearts pair, matched 20, suited 20, any 20, any queen — and my first version put "queen + ten-value card" in the "any queen" bucket. But a queen plus a ten <em>is a 20</em>, which pays differently. The probability buckets weren't mutually exclusive and the RTP came out wrong. The fix commit is march 2025: <code>"fixed except queen_probability"</code>. Combinatorics doesn't care about your intentions.</p>
+        <p>The README is still the original v1 planning scratchpad — a numbered UX flow that ends mid-sentence at step 8. Eighteen months later i came back and rebuilt the GUI into the version in the screenshots (+1,877 lines over two commits) and never touched the README. It stays. It's load-bearing honesty.</p>
+      </section>
+
+      <section>
+        <h2>the discovery</h2>
+        <p>The repo also holds a folder of reverse-engineering notes (filename: <code>noets.txt</code>, a typo i refuse to fix) from poking at the casino's web client. It turns out the client logs the complete dealer and player hands to the browser console at debug level — every card, as it's dealt. Which means the "type cards in by hand" UX could in principle be bypassed entirely by just reading the casino's own logs. The notes stayed notes.</p>
+      </section>
+
+      <section>
+        <h2>stack</h2>
+        <dl class="proj-specs">
+          <dt>app</dt><dd>Python + tkinter, custom-drawn widgets with light/dark themes. ~1,400 lines.</dd>
+          <dt>math</dt><dd>Exact combinatorics via math.comb; hi-lo + Illustrious 18 strategy engine.</dd>
+          <dt>status</dt><dd>Working desktop app, last touched september 2026. Public on github.</dd>
+        </dl>
+      </section>
+    </article>
+
+    <footer class="footer proj-footer">
+      <span>aaronca.no/projects/slosh</span>
+      <span>© 2026</span>
+    </footer>
+  </main>
+  <script src="../../topo.js" defer></script>
+  <script src="../../script.js" defer></script>
+</body>
+</html>
